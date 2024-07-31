@@ -24,16 +24,16 @@ def test_register(client, app):
 @pytest.mark.parametrize(
     ("username", "password", "message"),
     (
-        ("", "", b"Se requiere un usuario."),
-        ("a", "", "Se requiere una contraseña.".encode()),
-        ("test", "test", b"ya esta registrado."),
+        ("", "", "Se requiere un usuario."),
+        ("a", "", "Se requiere una contraseña."),
+        ("test", "test", "ya esta registrado."),
     ),
 )
 def test_register_validate_input(client, username, password, message):
     response = client.post(
         "/auth/register", data={"username": username, "password": password}
     )
-    assert message in response.data
+    assert message in response.data.decode()
 
 
 def test_login(client, auth):
@@ -54,11 +54,11 @@ def test_login(client, auth):
 
 @pytest.mark.parametrize(
     ("username", "password", "message"),
-    (("a", "test", b"El usuario es incorrecto."), ("test", "a", "La contraseña es incorrecta.".encode())),
+    (("a", "test", "El usuario es incorrecto."), ("test", "a", "La contraseña es incorrecta.")),
 )
 def test_login_validate_input(auth, username, password, message):
     response = auth.login(username, password)
-    assert message in response.data
+    assert message in response.data.decode()
 
 
 def test_logout(client, auth):
