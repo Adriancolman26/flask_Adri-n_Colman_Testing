@@ -71,10 +71,15 @@ def register():
                     (username, generate_password_hash(password), email),
                 )
                 db.commit()
-            except db.IntegrityError:
-                # The username was already taken, which caused the
-                # commit to fail. Show a validation error.
-                error = f"El usuario {username} ya esta registrado."
+            except db.IntegrityError as e:
+                mensaje = e.args[0]
+                print(mensaje)
+                if "user.username" in mensaje:
+                    error = f"El usuario {username} ya esta registrado."
+                elif "user.email" in mensaje:
+                    error = f"El email {email} ya esta registrado."
+                else:
+                    error = "Error desconocido"
             else:
                 # Success, go to the login page.
                 return redirect(url_for("auth.login"))
