@@ -122,3 +122,24 @@ def logout():
     """Clear the current session, including the stored user id."""
     session.clear()
     return redirect(url_for("index"))
+
+@bp.route('/updateEmail', methods=('GET', 'POST'))
+def updateEmail():
+    if request.method == 'POST':
+        email = request.form['new_email']
+        error = None
+        db = get_db()
+
+        if not email:
+            error = "Email is Required"
+
+        if error is None:
+            db.execute(
+                'UPDATE user SET email = ? WHERE id = ?',
+                (email, g.user['id'])
+            )
+            db.commit()
+            return redirect(url_for('index'))
+        else:
+            flash(error)
+    return render_template('auth/updateEmail.html')

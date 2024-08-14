@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {% block header %}
+<h1>{% block title %}Edit mail{% endblock %}</h1>
+{% endblock %} 
+{% block content %}
+<form method="post">
+  <label for="new_email">Cambiar Email</label>
+  <input name="new_email" id="new_email" placeholder="{{ request.form['email'] or
+  g.user['email'] }} (Email actual)" required />
+    <input type="submit" value="guardar" />
+  </form>
+</form>
+
+{% endblock %}
